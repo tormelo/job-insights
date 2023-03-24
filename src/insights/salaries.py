@@ -20,30 +20,29 @@ def get_min_salary(path: str) -> int:
     return min(get_salaries(path))
 
 
+def convert_to_int(input: Union[int, str]) -> int:
+    input_type = type(input)
+
+    if input_type == int:
+        return input
+    elif input_type == str and input.isnumeric():
+        return int(input)
+    else:
+        raise ValueError("Invalid value")
+
+
 def matches_salary_range(job: Dict, salary: Union[int, str]) -> bool:
-    """Checks if a given salary is in the salary range of a given job
+    if ("min_salary" not in job) or ("max_salary" not in job):
+        raise ValueError("Expected key doesn't exist")
 
-    Parameters
-    ----------
-    job : dict
-        The job with `min_salary` and `max_salary` keys
-    salary : int
-        The salary to check if matches with salary range of the job
+    min_salary = convert_to_int(job["min_salary"])
+    max_salary = convert_to_int(job["max_salary"])
+    target = convert_to_int(salary)
 
-    Returns
-    -------
-    bool
-        True if the salary is in the salary range of the job, False otherwise
+    if min_salary > max_salary:
+        raise ValueError("min_salary can't be greater than max_salary")
 
-    Raises
-    ------
-    ValueError
-        If `job["min_salary"]` or `job["max_salary"]` doesn't exists
-        If `job["min_salary"]` or `job["max_salary"]` aren't valid integers
-        If `job["min_salary"]` is greather than `job["max_salary"]`
-        If `salary` isn't a valid integer
-    """
-    raise NotImplementedError
+    return min_salary <= target <= max_salary
 
 
 def filter_by_salary_range(
